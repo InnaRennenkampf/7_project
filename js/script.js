@@ -1,20 +1,71 @@
-var url = "https://dog.ceo/api/breeds/list/all";
+let url = "https://dog.ceo/api/breeds/list/all";
 $.getJSON(url, function (data) {
-    $.each(data.message, function (i, item) {
-        $('#dog-select').append(
-            $('<option value=' + i + '>' + i + '</option>')
+    $('#breed-select').append(
+        $('<option>Select Breed</option>')
+    )
+    $.each(data.message, function (breed, subbreeds) {
+        $('#breed-select').append(
+            $('<option value=' + breed + '>' + breed + '</option>')
         )
     });
 });
 
-$('#dog-select').on('change', function () {
-    var url = "https://dog.ceo/api/breed/" + this.value + "/images";
+$('#breed-select').on('change', function () {
+    $('#dog-images').empty();
+    $('#subBreed-select').remove();
+    requestSubBreedsListByBreed(this.value);
+});
+
+function requestSubBreedsListByBreed(breed) {
+    let url = "https://dog.ceo/api/breed/" + breed + "/list";
     $.getJSON(url, function (data) {
-        $('#data').empty();
+        if (data.message.length > 0) {
+            requestImagesByBreed(breed, data.message);
+        } else {
+            getDogByBreed(breed);
+        }
+    });
+}
+
+function requestImagesByBreed(breed, subBreeds) {
+    $('#selectors').append(
+        $('<select id="subBreed-select">')
+    )
+    $('#subBreed-select').append(
+        $('<option>Select Sub-Breed</option>')
+    )
+    $.each(subBreeds, function (index, subBreed) {
+        $('#subBreed-select').append(
+            $('<option value=' + subBreed + '>' + subBreed + '</option>')
+        )
+    });
+    $('#selectors').append(
+        $('</select">')
+    )
+    $('#subBreed-select').on('change', function () {
+        $('#dog-images').empty();
+        getImagesByBreed(breed, this.value);
+    });
+}
+
+function getDogByBreed(breed) {
+    let url = "https://dog.ceo/api/breed/" + breed + "/images";
+    $.getJSON(url, function (data) {
         $.each(data.message, function (i, item) {
-            $('#data').append(
+            $('#dog-images').append(
                 $('<img src=' + item + '>')
             )
         });
     });
-});
+}
+
+function getImagesByBreed(breed, subBreed) {
+    let url = "https://dog.ceo/api/breed/" + breed + "/" + subBreed + "/images";
+    $.getJSON(url, function (data) {
+        $.each(data.message, function (i, item) {
+            $('#dog-images').append(
+                $('<img src=' + item + '>')
+            )
+        });
+    });
+}
