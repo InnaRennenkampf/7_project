@@ -1,0 +1,14 @@
+.selectors {
+  margin: 30px auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0;
+}
+
+.col-6, .col-md-4 {
+  margin-bottom: 30px;
+  height: 33%;
+}

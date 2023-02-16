@@ -48,12 +48,16 @@ function requestImagesByBreed(breed, subBreeds) {
     });
 }
 
+function getImg(url) {
+    return '<img class="col-6 col-md-4" src=' + url + '>';
+}
+
 function getDogByBreed(breed) {
     let url = "https://dog.ceo/api/breed/" + breed + "/images";
     $.getJSON(url, function (data) {
         $.each(data.message, function (i, item) {
             $('#dog-images').append(
-                $('<img src=' + item + '>')
+                $(getImg(item))
             )
         });
     });
@@ -64,7 +68,7 @@ function getImagesByBreed(breed, subBreed) {
     $.getJSON(url, function (data) {
         $.each(data.message, function (i, item) {
             $('#dog-images').append(
-                $('<img src=' + item + '>')
+                $(getImg(item))
             )
         });
     });
